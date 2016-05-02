@@ -3,7 +3,7 @@ image2footprint is a utility for converting images into gEDA PCB compatible foot
 
 image2footprint is licensed GPL2, or at your option, GPL3 or higher.
 
-A simple utility that uses the java ImageIO class to load .jpg or .png files and convert them into gEDA PCB compatible footprints for placement on layouts.
+image2footprint is a simple utility that uses the java ImageIO class to load .jpg or .png files and convert them into gEDA PCB compatible footprints for placement on PCB layouts.
 
 The user can specify a pixel pitch, which is equal to the spacing between dots in the rendered silk screen image, in millimetres. The default is 0.5mm, which is equivalent to 500,000 nanometres.
 
@@ -17,7 +17,7 @@ The user can specify a minimum silk dot size; the default is 8mil, which is equi
 
 The utility exports three versions of the footprint:
 
-- one which simple averages R,G,B values to produce a grey level,
+- one which simply averages R,G,B values to produce a grey level,
 
 - another which calculates luminosity based on sRGB colour weights:
 
@@ -29,12 +29,12 @@ The utility exports three versions of the footprint:
 
   - see http://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
 
-The luminosity value ( 0...255 ) is then used to determine the dot size on the silk screen:
+The luminosity value ( 0...n ) is then used to determine the dot size on the silk screen:
 
-  thickness = diameter = sqrt((luminosity * pitch^2)/(3 * 255))
+  thickness = diameter = sqrt((luminosity/n)* pitch^2)
 
 The user can select which footprint looks best.
 
-Obviously, the appearance of the manufactured PCB will depend on the capabilities of the PCB manufacturer, and their in house conversion of the Gerber data supplied ot them.
+Obviously, the appearance of the manufactured PCB will depend on the capabilities of the PCB manufacturer, and their in house conversion of the Gerber data supplied to them.
 
 TODO - Kicad compatible export
