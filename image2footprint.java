@@ -46,12 +46,12 @@ public class image2footprint {
 
   static int width = 0;
   static int height = 0;
-  static boolean addCornerPoints = true;
+  static boolean addCornerPoints = false;
 
   static long scaledPixelSize = 0;
   static long x = 0;
   static long y = 0;
-  static long minimumPixelSize = 800; // decimils = 203 nm 
+  static long minimumPixelSize = 800; // centimils = 203 nm 
 
   static long dotPitchMicrons = 500; //  = 0.5mm dot pitch
   static long dotPitchNM = dotPitchMicrons*1000; // = 0.5mm dot pitch
@@ -60,11 +60,30 @@ public class image2footprint {
   static long maximalDotFactor = dotPitchDecimils*dotPitchDecimils/765;
 
   public static void main(String [] args) throws IOException {
-    filename = args[0];
-    if (filename == null) {
-      System.exit(0);
+
+    if (args.length > 0) {
+        filename = args[0];
+        if (filename == null || "-h".equals(filename)) {
+          printHelp();
+          System.exit(0);
+        }
     }
-    
+
+    for (int index = 1; index < args.length; index++) {
+      if (args[index].equals("-pp")
+          && (++index < args.length)) {
+        dotPitchMicrons = Integer.parseInt(args[index]);
+      } else if (args[index].equals("-mp")
+                 && (++index < args.length)) {
+        minimumPixelSize = Integer.parseInt(args[index]);
+      } else if (args[index].equals("-cp")) {
+        addCornerPoints = true;
+      } else if (args[index].equals("-h")) {
+        printHelp();
+        System.exit(0);
+      }
+    }
+      
     BufferedImage graphic = null;
     File input = new File(filename);
 
@@ -169,7 +188,7 @@ public class image2footprint {
                                     long yCoord,
                                     long thickness) {
     return "ElementLine[" +
-        xCoord/254 + " " +  // convert nm to decimils
+        xCoord/254 + " " +  // convert nm to centimils
         yCoord/254 + " " +
         xCoord/254 + " " +
         yCoord/254 + " " +
@@ -177,4 +196,16 @@ public class image2footprint {
         "]";
   }
 
+  private static void printHelp() {
+    System.out.println("\nUsage: \n\n"
+                       + " java image2footprint picture.png\n\n"
+                       + "\t -mp XXX"
+                       + "\tspecify minimum pixel size"
+                       + "(centimils)\n\n"
+                       + "\t -pp YYY"
+                       + "\tspecify pixel pitch (microns)\n\n"
+                       + "\t -cp"
+                       + "\t\tadd corner points to footprint\n");
+  }
+ 
 }
