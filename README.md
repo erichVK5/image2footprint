@@ -15,6 +15,8 @@ The converter assumes a white silkscreen on a dark soldermask background. For ea
 
 The user can specify a minimum silk dot size; the default is 8mil, which is equivalent to 203 nanometres.
 
+Specifying a minimum pixel size is equivalent to specifying a threshold luminosity, below which silk dots are not generated. This may be of use when converting a photograph of an existing PCB into a footprint, upon which trackwork and features can be snapped to grid to duplicate the PCB.
+
 The utility exports three versions of the footprint:
 
 - one which simply averages R,G,B values to produce a grey level,
