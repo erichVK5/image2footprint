@@ -7,7 +7,7 @@ image2footprint is a simple utility that uses the java ImageIO class to load .jp
 
 The user can specify a pixel pitch, which is equal to the spacing between dots in the rendered silk screen image, in millimetres. The default is 0.5mm, which is equivalent to 500,000 nanometres.
 
-The user can also specify a final image size in terms of height and width, specified in mm, and the provided image will be scaled to this final size on the final footprint.
+The user can also specify a final image size in terms of height and width, specified in mm, and the provided image will be scaled to this final size on the final footprint. The image dimensions should ideally be integer multiples, m x n, of the pixel pitch, so that the resulting image will be m x n pixels in size.
 
 Transparent layers or any other features which are not to appear on the final footprint should be made black with a suitable graphics editor, i.e. the GIMP.
 
