@@ -41,7 +41,10 @@ The user can select which footprint looks best.
 
 Obviously, the appearance of the manufactured PCB will depend on the capabilities of the PCB manufacturer, and their in house conversion of the Gerber data supplied to them.
 
-TODO - Kicad compatible export
+TODO
+        - Kicad compatible export
+        - gamma corrected conversion to greyscale
+        - user defined scaling of the image curding conversion
 
 Usage: 
 
