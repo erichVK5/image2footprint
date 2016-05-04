@@ -39,6 +39,8 @@ The luminosity value ( 0...n ) is then used to determine the dot size on the sil
 
 The user can select which footprint looks best.
 
+If the picture is of an existing PCB being duplicated, pure white pixels can be placed visually where pins are located in a graphics editor before invoking image2footprint with the -wslscp "Would Sir Like Some Cracked Pepper" option. This will place a pin on the footprint wherever a pure white pixel is found. 
+
 Obviously, the appearance of the manufactured PCB will depend on the capabilities of the PCB manufacturer, and their in house conversion of the Gerber data supplied to them.
 
 TODO
@@ -59,3 +61,6 @@ Usage:
 	 -pp YYY	specify pixel pitch (microns)
 
 	 -cp		add corner points to footprint
+
+	 -wslscp	"Would Sir Like Some Cracked Pepper?" Sprinkle pins on any pure white pixels.
+

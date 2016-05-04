@@ -48,6 +48,8 @@ public class image2footprint {
   static int height = 0;
   static boolean addCornerPoints = false;
 
+  static boolean wouldSirLikeSomeCrackedPepper = false;
+
   static long scaledPixelSize = 0;
   static long x = 0;
   static long y = 0;
@@ -58,6 +60,8 @@ public class image2footprint {
   static long dotPitchDecimils = dotPitchNM/254;
   static long dotAreaNmSq = (long)(dotPitchNM*dotPitchNM/4);
   static long maximalDotFactor = dotPitchDecimils*dotPitchDecimils/765;
+
+  static int pinNum = 0;
 
   public static void main(String [] args) throws IOException {
 
@@ -78,6 +82,8 @@ public class image2footprint {
         minimumPixelSize = Integer.parseInt(args[index]);
       } else if (args[index].equals("-cp")) {
         addCornerPoints = true;
+      } else if (args[index].equals("-wslscp")) {
+         wouldSirLikeSomeCrackedPepper = true;
       } else if (args[index].equals("-h")) {
         printHelp();
         System.exit(0);
@@ -117,6 +123,7 @@ public class image2footprint {
           = new PrintWriter(filename + "_averagedRGB.fp");
       footprint.println(FPHeader1 + filename + FPHeader2);
 
+      pinNum = 0;
       for (int w = 0; w < width; w++) {
         x = w*dotPitchNM + dotPitchNM/2; // make it nm
         y = dotPitchNM/2;
@@ -129,7 +136,9 @@ public class image2footprint {
           luminosity = ((red + green + blue));
           scaledPixelSize =
               (long)(Math.sqrt(luminosity*maximalDotFactor));
-          if (scaledPixelSize > minimumPixelSize) {
+          if (wouldSirLikeSomeCrackedPepper && luminosity == 765) {
+            footprint.println(gedaPin(x,y));
+          } else if (scaledPixelSize > minimumPixelSize) {
             footprint.println(gedaSilkPixel(x,y,scaledPixelSize));
           }
         }
@@ -149,6 +158,7 @@ public class image2footprint {
           = new PrintWriter(filename + "_sRGB.fp");
       footprint.println(FPHeader1 + filename + FPHeader2);
 
+      pinNum = 0;
       for (int w = 0; w < width; w++) {
         x = w*dotPitchNM + dotPitchNM/2; // make it nm
         y = dotPitchNM/2;
@@ -163,7 +173,9 @@ public class image2footprint {
                           + 0.072187 * blue);
           scaledPixelSize =
               (long)(Math.sqrt(luminosity*maximalDotFactor));
-          if (scaledPixelSize > minimumPixelSize) {
+          if (wouldSirLikeSomeCrackedPepper && luminosity == 765) {
+            footprint.println(gedaPin(x,y));
+          } else if (scaledPixelSize > minimumPixelSize) {
             footprint.println(gedaSilkPixel(x,y,scaledPixelSize));
           }
         }
@@ -192,9 +204,39 @@ public class image2footprint {
         yCoord/254 + " " +
         xCoord/254 + " " +
         yCoord/254 + " " +
-        thickness + // in decimils
+        thickness + // in centimils
         "]";
   }
+
+  private static String gedaPin(long xCoord,
+                                long yCoord) {
+    return "Pin[" +
+        xCoord/254 + " " +  // convert nm to centimils
+        yCoord/254 + " " +
+        8000 + " " +
+        1000 + " " +
+        1000 + " " +
+        3500 + " " +
+        "\"pin\"" + " \"" +
+        ++pinNum + "\" " +
+        "\"\"" + 
+        "]";
+  }
+
+
+  /*
+Pin[X Y Thickness Clearance Mask Drill Name Number SFlags]
+Name        Type     Values Description
+---------------------------------------
+X, Y        Integer  ?      Position (Center)
+Thickness   Integer  ?      Diameter of copper annulus (pad)
+Clearance   Integer  ?      (Half) separation to surrounding copper
+Mask        Integer  ?      Diameter of solder mask relief (opening)
+Drill       Integer  ?      Diameter of the hole
+Name        String   ?      (Arbitrary) name of this pin
+Number      String   ?      Number of the pin, used to attach nets
+SFlags      String   ?      Symbolic flags
+  */
 
   private static void printHelp() {
     System.out.println("\nUsage: \n\n"
@@ -205,7 +247,9 @@ public class image2footprint {
                        + "\t -pp YYY"
                        + "\tspecify pixel pitch (microns)\n\n"
                        + "\t -cp"
-                       + "\t\tadd corner points to footprint\n");
+                       + "\t\tadd corner points to footprint\n\n"
+                       + "\t -wslscp"
+                       + "\t\"Would Sir Like Some Cracked Pepper?\" Sprinkle pins on any pure white pixels.\n");
   }
  
 }
