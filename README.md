@@ -35,7 +35,7 @@ The utility exports three versions of the footprint:
 
 The luminosity value ( 0...n ) is then used to determine the dot size on the silk screen:
 
-  thickness = diameter = sqrt((luminosity/n)* pitch^2)
+  thickness = diameter = sqrt((luminosity/n) * pitch^2)
 
 The user can select which footprint looks best.
 
@@ -43,10 +43,13 @@ If the picture is of an existing PCB being duplicated, pure white pixels can be 
 
 Obviously, the appearance of the manufactured PCB will depend on the capabilities of the PCB manufacturer, and their in house conversion of the Gerber data supplied to them.
 
+The utility can be compiled with gcj as a standalone native binary, but it seems that the gcj libraries are a bit broken with .png files. Natively compiled binaries seem to work fine with jpegs, however.
+
 TODO
         - Kicad compatible export
         - gamma corrected conversion to greyscale
         - user defined scaling of the image curding conversion
+	- figure out why gcj png image libraries are broken
 
 Usage: 
 
