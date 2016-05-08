@@ -1,5 +1,5 @@
 # image2footprint
-image2footprint is a utility for converting images into gEDA PCB compatible footprint artwork.
+image2footprint is a utility for converting images into gEDA PCB compatible footprint artwork, which can be used to decorate a PCB, or assist in duplicating an existing PCB.
 
 image2footprint is licensed GPL2, or at your option, GPL3 or higher.
 
@@ -35,21 +35,18 @@ The utility exports three versions of the footprint:
 
 The luminosity value ( 0...n ) is then used to determine the dot size on the silk screen:
 
-  thickness = diameter = sqrt((luminosity/n) * pitch^2)
+  thickness = diameter = sqrt((luminosity/n)* pitch^2)
 
 The user can select which footprint looks best.
 
-If the picture is of an existing PCB being duplicated, pure white pixels can be placed visually where pins are located in a graphics editor before invoking image2footprint with the -wslscp "Would Sir Like Some Cracked Pepper" option. This will place a pin on the footprint wherever a pure white pixel is found. 
+If the picture is of an existing PCB being duplicated, pure white pixels can be placed visually where pins are located in a graphics editor before invoking image2footprint with the -wslscp "Would Sir Like Some Cracked Pepper" option. This will place a pin on the footprint wherever a pure white pixel is found. This option, if used with the minimum pixel size (brightness) threshold, can facilitate automatic duplication of component holes and pads of an existing PCB. If combined with processing of the original image with potrace and pstoedit, to produce copper layer polygons matching the PCB tracks, duplication of an existing PCB should be quite simple.
 
 Obviously, the appearance of the manufactured PCB will depend on the capabilities of the PCB manufacturer, and their in house conversion of the Gerber data supplied to them.
-
-The utility can be compiled with gcj as a standalone native binary, but it seems that the gcj libraries are a bit broken with .png files. Natively compiled binaries seem to work fine with jpegs, however.
 
 TODO
         - Kicad compatible export
         - gamma corrected conversion to greyscale
-        - user defined scaling of the image curding conversion
-	- figure out why gcj png image libraries are broken
+        - user defined scaling of the image during conversion
 
 Usage: 
 
