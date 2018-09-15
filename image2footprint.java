@@ -53,7 +53,7 @@ public class image2footprint {
   static long scaledPixelSize = 0;
   static long x = 0;
   static long y = 0;
-  static long minimumPixelSize = 800; // centimils = 203 nm 
+  static long minimumPixelSize = 800; // centimils = 203 nm
 
   static long dotPitchMicrons = 500; //  = 0.5mm dot pitch
   static long dotPitchNM = dotPitchMicrons*1000; // = 0.5mm dot pitch
