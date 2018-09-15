@@ -144,6 +144,7 @@ public class image2footprint {
         }
       }
       if (addCornerPoints) {
+        footprint.println("# Corner points");
         footprint.println(addOppositeCorners());
       }
       footprint.println(")");
@@ -181,6 +182,7 @@ public class image2footprint {
         }
       }
       if (addCornerPoints) {
+        footprint.println("# Corner points");
         footprint.println(addOppositeCorners());
       }
       footprint.println(")");
