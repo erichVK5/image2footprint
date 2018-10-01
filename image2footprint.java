@@ -53,10 +53,10 @@ public class image2footprint {
   static long scaledPixelSize = 0;
   static long x = 0;
   static long y = 0;
-  static long minimumPixelSize = 800; // centimils = 203 nm 
+  static long minimumPixelSize = 400; // centimils
 
-  static long dotPitchMicrons = 500; //  = 0.5mm dot pitch
-  static long dotPitchNM = dotPitchMicrons*1000; // = 0.5mm dot pitch
+  static long dotPitchMicrons = 125; //  = 0.125mm dot pitch
+  static long dotPitchNM = dotPitchMicrons*1000;
   static long dotPitchDecimils = dotPitchNM/254;
   static long dotAreaNmSq = (long)(dotPitchNM*dotPitchNM/4);
   static long maximalDotFactor = dotPitchDecimils*dotPitchDecimils/765;
@@ -144,6 +144,7 @@ public class image2footprint {
         }
       }
       if (addCornerPoints) {
+        footprint.println("# Corner points");
         footprint.println(addOppositeCorners());
       }
       footprint.println(")");
@@ -181,6 +182,7 @@ public class image2footprint {
         }
       }
       if (addCornerPoints) {
+        footprint.println("# Corner points");
         footprint.println(addOppositeCorners());
       }
       footprint.println(")");
