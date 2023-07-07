@@ -19,7 +19,41 @@ Specifying a minimum pixel size (in centimils) is equivalent to specifying a thr
 
 The user can add corner points to the top left and bottom right corners with the -cp command line flag, to assist with placement of the footprint on layouts of a defined size and with a pre-determined alignment.
 
-The utility can also export 2 bit graphics (black and white) as a square polygon per pixel in a gEDA PCB layout. A gEDA PCB layout rather than a footprint is used because gEDA PCB footprints do not support polygon elements. The square pixels overlap by 0.1 mil to facilitate boolean polygon operations during subsequent export to gerber by PCB or pcb-rnd. The square pixel export format is useful for doing one colour at a time for an already dithered picture with an indexed palette. For example, a picture using black (silk), white (soldermask), brown (fibreglass) and silver (HASL Pb/Tin), can process the three-colour dithered layers one at a time as a black and white graphic, to allow the soldermask aperture artwork to be generated, and silk artwork to be generated for placement on the layout. Each such generated layout can easily be imported into pcb-rnd, which has editable positive and negative layer types in the stackup for silk and soldermask layers, and then move the elements to the required layer. gEDA PCB users may struggle to utilise more than one export, and may struggle to use soldermask aperture artwork to expose the fibreglass substrate.
+The utility can also export 2 bit graphics (black and white) as a square polygon per pixel in a gEDA PCB layout. A gEDA PCB layout rather than a footprint is used because gEDA PCB footprints do not support polygon elements. The square pixels overlap by 0.1 mil to facilitate boolean polygon operations during subsequent export to gerber by PCB or pcb-rnd. The square pixel export format is useful for doing one colour at a time for an already dithered picture with an indexed palette. For example, a picture using black (silk), white (soldermask), brown (fibreglass) and silver (HASL Pb/Tin), can process the three-colour dithered layers one at a time as a black and white graphic, i.e. copper pixels:
+
+![copper pixels](images/copper-squares.png)
+
+silkscreen pixels:
+
+![silkscreen pixels](images/silkscreen-squares.png)
+
+solder mask pixels/apertures:
+
+![solder mask pixels](images/solder-mask-apertures.png)
+
+to allow the soldermask aperture artwork to be generated, and silk artwork to be generated for placement on the layout.
+
+Each such generated layout can easily be imported into pcb-rnd, which has editable positive and negative layer types in the stackup for silk and soldermask layers, and then move the elements to the required layer.
+
+Importing the layouts from image2footprint into layers in pcb-rnd:
+
+copper layer:
+
+![copper pixels](images/copper-layer.png)
+
+copper and silk layers:
+
+![copper plus silk pixels](images/copper-layer-and-silk-layer.png)
+
+copper and silk layers and soldermask apertures:
+
+![copper plus silk pixels plus soldermask apertures](images/copper-layer-and-silk-layer-and-soldermask-apertures.png)
+
+and the layout exported from pcb-rnd as an openscad model for viewing
+
+![copper pixels](images/openscad-render.png)
+
+gEDA PCB users may struggle to utilise more than one export in layout, and may struggle to use soldermask aperture artwork to expose the fibreglass substrate.
 
 The utility exports three versions of the footprint:
 
