@@ -49,7 +49,7 @@ copper and silk layers and soldermask apertures:
 
 ![copper plus silk pixels plus soldermask apertures](images/copper-layer-and-silk-layer-and-soldermask-apertures.png)
 
-and the layout exported from pcb-rnd as an openscad model for viewing
+and the layout exported from pcb-rnd as an openscad model for viewing (specifiying the required silkscreen and soldermask colours in the export dialogue to match the intended manufacturing colours)
 
 ![copper pixels](images/openscad-render.png)
 
