@@ -101,8 +101,8 @@ Usage:
 	 -pp YYY	specify pixel pitch (microns)
 
 	 -cp		add corner points to footprint
-
-         -sq            use square pixels which overlap by 0.1 mil at edges
+  
+  	 -sq            use square pixels which overlap by 0.1 mil at edges
 
 	 -wslscp	"Would Sir Like Some Cracked Pepper?" Sprinkle pins on any pure white pixels.
 
