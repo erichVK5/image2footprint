@@ -1,7 +1,7 @@
 //
-// image2footprint.java v0.1
+// image2footprint.java v0.2
 //
-// Copyright (C) 2016 Erich S. Heinzle, a1039181@gmail.com
+// Copyright (C) 2016, 2023 Erich S. Heinzle, a1039181@gmail.com
 
 //    see LICENSE-gpl-v2.txt for software license
 //    see README.txt
@@ -35,8 +35,33 @@ public class image2footprint {
   static PrintWriter footprint;
   static String FPHeader1 = "Element[\"\" \"";
   static String FPHeader2 = "\" \"\" \"\" 0 0 0 25000 0 100 \"\"]\n(";
-  static String FPFooter = ")";
+  static String Footer = ")";
   static String filename = "";
+
+  static String LayoutHeader1 = "# release: pcb 4.2.2\n\n" +
+	"# To read pcb files, the pcb version (or the git source date) must be >= the file version\n" +
+	"FileVersion[20091103]\n\n" +
+	"PCB[\"\" 6000.00mil 5000.00mil]\n\n" +
+	"Grid[10.00mil 0.0000 0.0000 0]\n" +
+	"PolyArea[3100.006200]\n" +
+	"Thermal[0.500000]\n" +
+	"DRC[10.00mil 10.00mil 10.00mil 10.00mil 15.00mil 10.00mil]\n" +
+	"Flags(\"nameonpcb,uniquename,clearnew,snappin\")\n" +
+	"Groups(\"1,c:2:3:4:5:6,s:7:8\")\n" +
+	"Styles[\"Signal,10.00mil,36.00mil,20.00mil,10.00mil:Power,25.00mil,60.00mil,35.00mil,10.00mil:Fat,40.00mil,60.00mil,35.00mil,10.00mil:Skinny,6.00mil,24.02mil,11.81mil,6.00mil\"]\n";
+
+  static String LayoutHeader2 = "Layer(1 \"top\" \"copper\")\n(\n)\n" +
+	"Layer(2 \"ground\" \"copper\")\n(\n)\n" +
+	"Layer(3 \"signal2\" \"copper\")\n(\n)\n" +
+	"Layer(4 \"signal3\" \"copper\")\n(\n)\n" +
+	"Layer(5 \"power\" \"copper\")\n(\n)\n" +
+	"Layer(6 \"bottom\" \"copper\")\n(\n)\n" +
+	"Layer(7 \"outline\" \"copper\")\n(\n)\n" +
+	"Layer(8 \"spare\" \"copper\")\n(\n)\n" +
+	"Layer(9 \"bottom silk\" \"silk\")\n(\n)\n" +
+	"Layer(10 \"top silk\" \"silk\")\n(";
+
+  static String fileEnding = ".fp";
 
   static int red = 0;
   static int green = 0;
@@ -47,6 +72,7 @@ public class image2footprint {
   static int width = 0;
   static int height = 0;
   static boolean addCornerPoints = false;
+  static boolean squaredPixels = false;
 
   static boolean wouldSirLikeSomeCrackedPepper = false;
 
@@ -82,6 +108,8 @@ public class image2footprint {
         minimumPixelSize = Integer.parseInt(args[index]);
       } else if (args[index].equals("-cp")) {
         addCornerPoints = true;
+      } else if (args[index].equals("-sq")) {
+        squaredPixels = true;
       } else if (args[index].equals("-wslscp")) {
          wouldSirLikeSomeCrackedPepper = true;
       } else if (args[index].equals("-h")) {
@@ -89,7 +117,16 @@ public class image2footprint {
         System.exit(0);
       }
     }
-      
+
+    dotPitchNM = dotPitchMicrons*1000;
+    dotPitchDecimils = dotPitchNM/254;
+    dotAreaNmSq = (long)(dotPitchNM*dotPitchNM/4);
+    maximalDotFactor = dotPitchDecimils*dotPitchDecimils/765;
+
+    if (squaredPixels) {
+        fileEnding = ".pcb";
+    }
+
     BufferedImage graphic = null;
     File input = new File(filename);
 
@@ -120,9 +157,12 @@ public class image2footprint {
 
     if (picture != null) {
       PrintWriter footprint
-          = new PrintWriter(filename + "_averagedRGB.fp");
-      footprint.println(FPHeader1 + filename + FPHeader2);
-
+          = new PrintWriter(filename + "_averagedRGB" + fileEnding);
+      if (squaredPixels) {
+          footprint.println(LayoutHeader1 + LayoutHeader2);
+      } else {
+          footprint.println(FPHeader1 + filename + FPHeader2);
+      }
       pinNum = 0;
       for (int w = 0; w < width; w++) {
         x = w*dotPitchNM + dotPitchNM/2; // make it nm
@@ -139,7 +179,7 @@ public class image2footprint {
           if (wouldSirLikeSomeCrackedPepper && luminosity == 765) {
             footprint.println(gedaPin(x,y));
           } else if (scaledPixelSize > minimumPixelSize) {
-            footprint.println(gedaSilkPixel(x,y,scaledPixelSize));
+            footprint.println(gedaSilkPixel(x,y,scaledPixelSize,squaredPixels));
           }
         }
       }
@@ -147,7 +187,7 @@ public class image2footprint {
         footprint.println("# Corner points");
         footprint.println(addOppositeCorners());
       }
-      footprint.println(")");
+      footprint.println(Footer);
       footprint.close();
     }
   }
@@ -156,7 +196,7 @@ public class image2footprint {
     throws IOException{
     if (picture != null) {
       PrintWriter footprint
-          = new PrintWriter(filename + "_sRGB.fp");
+          = new PrintWriter(filename + "_sRGB" + fileEnding);
       footprint.println(FPHeader1 + filename + FPHeader2);
 
       pinNum = 0;
@@ -177,7 +217,7 @@ public class image2footprint {
           if (wouldSirLikeSomeCrackedPepper && luminosity == 765) {
             footprint.println(gedaPin(x,y));
           } else if (scaledPixelSize > minimumPixelSize) {
-            footprint.println(gedaSilkPixel(x,y,scaledPixelSize));
+            footprint.println(gedaSilkPixel(x,y,scaledPixelSize,squaredPixels));
           }
         }
       }
@@ -191,23 +231,33 @@ public class image2footprint {
   }
 
   private static String addOppositeCorners() {
-    return gedaSilkPixel(0,0,1000)
+    return gedaSilkPixel(0,0,1000,squaredPixels)
         + "\n"
         + gedaSilkPixel((width)*dotPitchNM,
                       (height)*dotPitchNM,
-                      1000);
+                      1000,squaredPixels);
   } 
 
   private static String gedaSilkPixel(long xCoord,
                                     long yCoord,
-                                    long thickness) {
-    return "ElementLine[" +
+                                    long thickness,
+                                    boolean squared) {
+    if (squared) {
+        return "    Polygon(\"clearpoly\")\n    (\n        [" +
+        ((xCoord/254) - (dotPitchNM/512+10)) + " " + ((yCoord/254) - (dotPitchNM/512+10)) + "] [" +
+        ((xCoord/254) + (dotPitchNM/512+10)) + " " + ((yCoord/254) - (dotPitchNM/512+10)) + "] [" +
+	((xCoord/254) + (dotPitchNM/512+10)) + " " + ((yCoord/254) + (dotPitchNM/512+10)) + "] [" +
+        ((xCoord/254) - (dotPitchNM/512+10)) + " " + ((yCoord/254) + (dotPitchNM/512+10)) +
+        "]\n    )";
+    } else {
+        return "ElementLine[" +
         xCoord/254 + " " +  // convert nm to centimils
         yCoord/254 + " " +
         xCoord/254 + " " +
         yCoord/254 + " " +
         thickness + // in centimils
         "]";
+    }
   }
 
   private static String gedaPin(long xCoord,
@@ -250,6 +300,8 @@ SFlags      String   ?      Symbolic flags
                        + "\tspecify pixel pitch (microns)\n\n"
                        + "\t -cp"
                        + "\t\tadd corner points to footprint\n\n"
+                       + "\t -sq"
+                       + "\t\tuse square pixels which overlap by 0.1 mil at edges\n\n"
                        + "\t -wslscp"
                        + "\t\"Would Sir Like Some Cracked Pepper?\" Sprinkle pins on any pure white pixels.\n");
   }
