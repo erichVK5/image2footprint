@@ -3,7 +3,7 @@ image2footprint is a utility for converting images into gEDA PCB compatible foot
 
 image2footprint is licensed GPL2, or at your option, GPL3 or higher.
 
-image2footprint is a simple utility that uses the java ImageIO class to load .jpg or .png files and convert them into gEDA PCB compatible footprints for placement on PCB layouts.
+image2footprint is a simple utility that uses the java ImageIO class to load .jpg or .png files and convert them into gEDA PCB compatible footprints for placement on PCB layouts in either gEDA PCB, or pcb-rnd, which can not only load gEDA footprints but also load gEDA layouts and even import multiple gEDA layouts for placement within an existing layout.
 
 The user can specify a pixel pitch (in microns), which is equal to the spacing between dots in the rendered silk screen image, in millimetres. The default is 0.5mm, which is equivalent to 500,000 nanometres.
 
@@ -53,7 +53,7 @@ and the layout exported from pcb-rnd as an openscad model for viewing (specifiyi
 
 ![copper pixels](images/openscad-render.png)
 
-gEDA PCB users may struggle to utilise more than one export in layout, and may struggle to use soldermask aperture artwork to expose the fibreglass substrate.
+gEDA PCB users may struggle to utilise more than one export in layout, and may struggle to use soldermask aperture artwork to expose the fibreglass substrate without resorting to hand editing of files.
 
 The utility exports three versions of the footprint:
 
