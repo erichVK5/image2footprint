@@ -1,9 +1,9 @@
 # image2footprint
-image2footprint is a utility for converting images into gEDA PCB compatible footprint artwork, which can be used to decorate a PCB, or assist in duplicating an existing PCB.
+image2footprint is a utility for converting images into footprint or layout artwork, which can be used to decorate a PCB, or assist in duplicating an existing PCB.
 
 image2footprint is licensed GPL2, or at your option, GPL3 or higher.
 
-image2footprint is a simple utility that uses the java ImageIO class to load .jpg or .png files and convert them into gEDA PCB compatible footprints for placement on PCB layouts in either gEDA PCB, or pcb-rnd, which can not only load gEDA footprints but also load gEDA layouts and even import multiple gEDA layouts for placement within an existing layout.
+image2footprint is a simple utility that uses the java ImageIO class to load .jpg or .png files and convert them into either footprints for placement on PCB layouts in pcb-rnd (or gEDA PCB; caveats apply), as well as layouts which can be loaded in pcb-rnd or imported as elements for placements within pcb-rnd and to a lesser extent, can be used in gEDA PCB (again, with some limitations).
 
 The user can specify a pixel pitch (in microns), which is equal to the spacing between dots in the rendered silk screen image, in millimetres. The default is 0.5mm, which is equivalent to 500,000 nanometres.
 
@@ -19,7 +19,7 @@ Specifying a minimum pixel size (in centimils) is equivalent to specifying a thr
 
 The user can add corner points to the top left and bottom right corners with the -cp command line flag, to assist with placement of the footprint on layouts of a defined size and with a pre-determined alignment.
 
-The utility can also export 2 bit graphics (black and white) as a square polygon per pixel in a gEDA PCB layout. A gEDA PCB layout rather than a footprint is used because gEDA PCB footprints do not support polygon elements. The square pixels overlap by 0.1 mil to facilitate boolean polygon operations during subsequent export to gerber by PCB or pcb-rnd. The square pixel export format is useful for doing one colour at a time for an already dithered picture with an indexed palette. For example, a picture using black (silk), white (soldermask), brown (fibreglass) and silver (HASL Pb/Tin), can process the three-colour dithered layers one at a time as a black and white graphic, i.e. copper pixels:
+The utility can also export 2 bit graphics (black and white) as a square polygon per pixel in the legacy gEDA PCB layout format. A gEDA PCB layout rather than a footprint is used because gEDA PCB footprints do not support polygon elements. The square pixels overlap by 0.1 mil to facilitate boolean polygon operations during subsequent export to gerber. The square pixel export format is useful for doing one colour at a time for an already dithered picture with an indexed palette. For example, a picture using black (silk), white (soldermask), brown (fibreglass) and silver (HASL Pb/Tin), can process the three-colour dithered layers one at a time as a black and white graphic, i.e. copper pixels:
 
 ![copper pixels](images/copper-squares.png)
 
@@ -53,7 +53,7 @@ and the layout exported from pcb-rnd as an openscad model for viewing (specifiyi
 
 ![copper pixels](images/openscad-render.png)
 
-gEDA PCB users may struggle to utilise more than one export in layout, and may struggle to use soldermask aperture artwork to expose the fibreglass substrate without resorting to hand editing of files.
+gEDA PCB users may struggle to utilise more than one export in layout, and may struggle to use soldermask aperture artwork to expose the fibreglass substrate without resorting to hand editing of files, since the soldermask layer is not directly editable in gEDA PCB, and unlike pcb-rnd, a layout cannot be imported for embedding within an existing layout in gEDA PCB.
 
 The utility exports three versions of the footprint:
 
